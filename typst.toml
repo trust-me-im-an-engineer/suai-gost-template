@@ -1,0 +1,7 @@
+[package]
+name = "suai-gost-template"
+version = "4.1.0"
+entrypoint = "suai-gost-template.typ"
+authors = ["lch361", "trust-me-im-an-engineer"]
+license = "GPL-3.0"
+description = "A template for writing reports suitable for university assignments"
