@@ -51,7 +51,11 @@
         table.hline(start: 0, end: 1),
         table.hline(start: 2, end: 3),
         table.hline(start: 4, end: 5),
-        [должность, уч. степень, звание], [], [подпись, дата], [], [инициалы, фамилия],
+        [должность, уч. степень, звание],
+        [],
+        [подпись, дата],
+        [],
+        [инициалы, фамилия],
     )
 
     v(50pt)
@@ -97,7 +101,7 @@
 /// A combination of GOST 7.32-2019 and 2.105-2019.
 #let template(
     /// Allowed to be 1em in case of large text.
-    leading: 1em,
+    leading: 1.25em,
     /// Allowed to be more than 12pt.
     fontsize: 12pt,
     doc,
@@ -147,12 +151,12 @@
             it.body
         }
         // GOST 2.105-2019, clause 6.6.3
-        v(weak: true, lineheight + leading * 2)
+        v(weak: true, lineheight + leading)
         par(hanging-indent: it.hanging-indent, content)
     }
 
     // GOST 7.32-2019, clause 6.2.1
-//     show heading: it => pagebreak(weak: true) + it
+    //     show heading: it => pagebreak(weak: true) + it
 
     // GOST 7.32-2019, clause 6.2.4
     show heading: set text(size: fontsize, hyphenate: false)
@@ -189,15 +193,20 @@
     show figure.where(caption: none): set figure(caption: [])
     show figure.where(caption: none): set figure.caption(separator: [])
 
+    // Отступ до и полсе фигур
     show figure: it => {
+        v(weak: true, leading * 2)
         it
-        v(weak: true, lineheight + leading * 2)
+        v(weak: true, +leading * 2)
     }
 
     // GOST 7.32-2017, clause 6.5.1
     // Display listings as images, except they are breakable
     show figure.where(kind: raw): set figure(kind: image, supplement: [Рисунок])
-    show figure.where(kind: raw): set block(width: 100%, breakable: true)
+    show figure.where(kind: raw): set block(
+        width: 100%,
+        breakable: true,
+    )
 
     // GOST 7.32-2017, clause 6.6.3
     show figure.where(kind: table): set figure.caption(position: top)
@@ -217,7 +226,10 @@
         let equation-ref(it) = {
             let el = it.element
             link(el.location(), {
-                numbering(el.numbering, ..counter(math.equation).at(el.location()))
+                numbering(
+                    el.numbering,
+                    ..counter(math.equation).at(el.location()),
+                )
             })
         }
 
@@ -279,7 +291,9 @@
 
         for item in it.children {
             block({
-                enum-counter.update((..xs, x) => xs.pos() + (item.at(default: x + 1, "number"),))
+                enum-counter.update((..xs, x) => (
+                    xs.pos() + (item.at(default: x + 1, "number"),)
+                ))
 
                 context {
                     h(it.indent)
