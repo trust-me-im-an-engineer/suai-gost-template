@@ -108,6 +108,7 @@
 ) = {
     let first-line-indent = 1.25cm
     let lineheight = 0.65em
+    let pagebreak-before-heading-threshold = 15%
 
     // GOST 7.32-2019, clause 6.1.1
     set text(
@@ -150,8 +151,11 @@
         } else {
             it.body
         }
-        // GOST 2.105-2019, clause 6.6.3
-        v(weak: true, lineheight + leading)
+
+        // GOST 2.105-2019, clause 6.6.3 + pagebrake if too close
+        block(breakable: false, height: pagebreak-before-heading-threshold)
+        v(-pagebreak-before-heading-threshold, weak: true)
+        // v(weak: true, lineheight + leading)
         par(hanging-indent: it.hanging-indent, content)
     }
 
@@ -320,6 +324,10 @@
         show block: it => it.body + parbreak()
         it
     }
+
+    // blue underlined links
+    show link: set text(fill: blue)
+    show link: underline
 
     doc
 }
